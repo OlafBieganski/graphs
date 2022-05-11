@@ -7,7 +7,7 @@ class graphM {
     public:
     graphM(int vertNum);
     bool addEdge(int start, int end, int weight);
-    void printAdjList();
+    void printAdjLists();
 };
 
 #endif
