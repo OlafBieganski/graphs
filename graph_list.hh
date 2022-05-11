@@ -1,3 +1,5 @@
+#ifndef GRAPH_L
+#define GRAPH_L
 #include <iostream>
 
 class node {
@@ -29,3 +31,5 @@ class graphL {
     // dla testów
     void printAdjLists();
 };
+
+#endif

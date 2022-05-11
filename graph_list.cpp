@@ -46,6 +46,8 @@ graphL::graphL(int vertNum){
     array = new list[vertNum];
 }
 
+// adds an egde between two nodes
+// params: start node, end node, weight
 bool graphL::addEdge(int start, int end, int weight){
     // krawedzie nie moga byc ujemnie indeksowane
     if(start < 0 || end < 0) return false;
