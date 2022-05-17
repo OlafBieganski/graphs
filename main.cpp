@@ -22,5 +22,8 @@ int main(){
     graphM.addEdge(1,4,1);
     graphM.printAdjLists();
 
+    cout << "Dijkstra algorithm:" << endl;
+    graphM.dijkstra(1);
+
     return 0;
 }
