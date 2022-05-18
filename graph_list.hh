@@ -30,6 +30,7 @@ class graphL {
     bool addEdge(int start, int end, int weight);
     // dla testów
     void printAdjLists();
+    void dijkstra();
 };
 
 #endif

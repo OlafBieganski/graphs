@@ -69,3 +69,8 @@ void graphL::printAdjLists(){
         array[i].printList();
     }
 }
+
+void graphL::dijkstra(){
+    int cost[num_of_vertex], parent[num_of_vertex];
+    
+}
