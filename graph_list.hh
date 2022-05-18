@@ -8,7 +8,7 @@ class node {
     public:
     node(int vert, int cost);
     void add(int vert, int cost);
-    bool isNextNull(){if(next == NULL){return true;}else{return false;}}
+    bool isNextNull(){return next == NULL;}
     void printList();
 };
 

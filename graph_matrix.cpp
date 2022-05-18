@@ -3,6 +3,7 @@
 #include <limits.h>
 
 #define INFINITY INT_MAX
+#define NO_PARENT -1
 
 // creates a graph instance
 // params: number of verticies in graph
@@ -60,17 +61,29 @@ int minDistance(int distance[], bool includedSTP[], int numVert){
     return min_idx;
 }
 
-void printSolution(int distance[], int vertNum)
+void printPath(int parent[], int vert){
+    if(parent[vert] == NO_PARENT)
+        return;
+    printPath(parent, parent[vert]);
+    std::cout << " " << vert;
+}
+
+void printSolution(int distance[], int parent[], int vertNum, int source)
 {
-    std::cout <<"Vertex \t Distance from Source" << std::endl;
-    for (int i = 0; i < vertNum; i++)
-        std::cout  << i << " \t\t"<<distance[i]<< std::endl;
+    std::cout <<"Vertex \t Distance from Source \t Path" << std::endl;
+    for (int i = 1; i < vertNum; i++){
+        std::cout  << source << "->" << i << " \t\t"<< distance[i] << "\t\t" << source;
+        printPath(parent, i);
+        std::cout << std::endl;
+    }
 }
 
 void graphM::dijkstra(int source){
 
     int distance[numVert]; // it will hold the sum of distances (shortest possible)
     bool includedSPT[numVert]; // true for the vertex that has already been included to spt
+    int parent[numVert]; // index is a vertex and value assigned is parent vertex
+    parent[source] = NO_PARENT; // source has no parent
     
     for(int i = 0; i < numVert; i++){
         distance[i] = INFINITY, includedSPT[i] = false;
@@ -80,12 +93,14 @@ void graphM::dijkstra(int source){
     for(int i = 0; i < numVert-1; i++){
         int picked = minDistance(distance, includedSPT, numVert);
         includedSPT[picked] = true;
+
         for(int j = 0; j < numVert; j++){
             if(!includedSPT[j] && adj_matrix[picked][j] && distance[picked] != INFINITY
             && distance[picked] + adj_matrix[picked][j] < distance[j]){
-                distance[j] = distance[picked] + adj_matrix[picked][j];
+                parent[j] = picked; // the last update will be parent
+                distance[j] = distance[picked] + adj_matrix[picked][j]; // upadating distance for adjacent verticies
             }
         }
     }
-    printSolution(distance, numVert);
+    printSolution(distance, parent, numVert, source);
 }
