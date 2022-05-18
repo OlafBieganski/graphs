@@ -83,7 +83,7 @@ void graphM::dijkstra(int source){
         for(int j = 0; j < numVert; j++){
             if(!includedSPT[j] && adj_matrix[picked][j] && distance[picked] != INFINITY
             && distance[picked] + adj_matrix[picked][j] < distance[j]){
-                distance[picked] = distance[picked] + adj_matrix[picked][j];
+                distance[j] = distance[picked] + adj_matrix[picked][j];
             }
         }
     }

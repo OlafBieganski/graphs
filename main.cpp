@@ -14,16 +14,23 @@ int main(){
     graph.printAdjLists();
 
     cout << "Graph implemented on adjacency matrix." << endl;
-    graphM graphM(4);
+    graphM graphM(7);
     graphM.addEdge(0,1,1);
     graphM.addEdge(1,2,2);
     graphM.addEdge(2,3,3);
     graphM.addEdge(1,3,1);
     graphM.addEdge(1,4,1);
+    graphM.addEdge(0,3,3);
+    graphM.addEdge(3,6,1);
+    graphM.addEdge(6,2,4);
+    graphM.addEdge(1,4,5);
+    graphM.addEdge(4,2,1);
+    graphM.addEdge(2,5,3);
+    graphM.addEdge(5,4,1);
     graphM.printAdjLists();
 
     cout << "Dijkstra algorithm:" << endl;
-    graphM.dijkstra(1);
+    graphM.dijkstra(0);
 
     return 0;
 }
