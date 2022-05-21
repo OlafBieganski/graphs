@@ -18,6 +18,8 @@ class list {
     list(){head = NULL;}
     void add(int vert, int cost);
     void printList();
+    void getAdjVert(int result[]); //
+    void getAdjWeights(int result[]); //
 };
 
 class graphL {
@@ -31,6 +33,8 @@ class graphL {
     // dla testów
     void printAdjLists();
     void dijkstra();
+    void getAdjVert(int vert, int result[]); //
+    void getAdjWeights(int vert, int result[]); //
 };
 
 #endif
