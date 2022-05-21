@@ -21,6 +21,7 @@ priority_queue::priority_queue(int capacity){
     }
 }
 
+// true if queue is empty
 bool priority_queue::isEmpty(){
     return !heapSize; // if heapSize 0 returns true
 }

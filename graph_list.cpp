@@ -1,4 +1,10 @@
 #include "graph_list.hh"
+#include "priority_queue.hh"
+#include <limits.h>
+
+#define INF INT_MAX
+#define NO_PARENT -1
+#define END -10
 
 using namespace std;
 
@@ -33,6 +39,52 @@ void list::add(int vert, int cost){
     else{
         head->add(vert, cost);
     }
+}
+
+void node::getAdjVert(int *result){
+    int i = 0;
+    // count howy many adj verticies
+    do{
+        i++;
+    }while(next != NULL);
+    // create array of sufficient size
+    int *arr = new int[i+1];
+    i = 0;
+    node* current = this;
+    do{
+        arr[i] = current->vertex;
+        i++;
+        current = current->next;
+    }while(current->next != NULL);
+    arr[i+1] = END;
+    result = arr;
+}
+
+void node::getAdjWeights(int *result){
+    int i = 0;
+    // count howy many adj verticies
+    do{
+        i++;
+    }while(next != NULL);
+    // create array of sufficient size
+    int *arr = new int[i+1];
+    i = 0;
+    node* current = this;
+    do{
+        arr[i] = current->weight;
+        i++;
+        current = current->next;
+    }while(current->next != NULL);
+    arr[i+1] = END;
+    result = arr;
+}
+
+void list::getAdjVert(int result[]){
+    head->getAdjVert(result);
+}
+
+void list::getAdjWeights(int result[]){
+    head->getAdjWeights(result);
 }
 
 void list::printList(){
@@ -70,7 +122,40 @@ void graphL::printAdjLists(){
     }
 }
 
-void graphL::dijkstra(){
+void graphL::getAdjVert(int vert, int *result){
+    array[vert].getAdjVert(result);
+}
+
+void graphL::getAdjWeights(int vert, int *result){
+    array[vert].getAdjWeights(result);
+}
+
+void graphL::dijkstra(int src){
+    // check if in scope
+    if(src >= num_of_vertex) return;
     int cost[num_of_vertex], parent[num_of_vertex];
-    
+    priority_queue minHeap(num_of_vertex);
+    for(int i = 0; i < num_of_vertex; i++){
+        minHeap.add(i, INF);
+    }
+    // set source distance as 0
+    minHeap.changeDist(src, 0);
+    parent[src] = NO_PARENT;
+    int *adjVert, *adjCost, vert;
+    // upadate distances of adjacent verticies as long as
+    // queue is not empty
+    while(!minHeap.isEmpty()){
+        heapNode node = minHeap.poll();
+        int currVert = node.vert;
+        int minDist = node.distance;
+        cost[currVert] = minDist;
+        getAdjVert(currVert, adjVert);
+        getAdjWeights(currVert, adjCost);
+        int i = 0;
+        while(adjVert[i] != END){
+            if(1){
+
+            }
+        }
+    }
 }
