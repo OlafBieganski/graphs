@@ -6,7 +6,7 @@ using namespace std;
 
 int main(){
 
-    priority_queue minHeap(7);
+    /*priority_queue minHeap(7);
     for(int i = 0; i < 5; i++){
         minHeap.add(i, 10);
     }
@@ -17,9 +17,9 @@ int main(){
     minHeap.changeDist(2,2);
     minHeap.poll();
     minHeap.poll();
-    minHeap.print();
+    minHeap.print();*/
 
-    /*
+   
     cout << "Graph implemented on adjacency list." << endl;
     graphL graph(7);
     graph.addEdge(0,1,1);
@@ -33,7 +33,7 @@ int main(){
     graph.addEdge(4,2,1);
     graph.addEdge(2,5,3);
     graph.addEdge(5,4,1);
-    graph.printAdjLists();
+    //graph.printAdjLists();
     graph.dijkstra(1);
 
     cout << "Graph implemented on adjacency matrix." << endl;
@@ -50,10 +50,10 @@ int main(){
     graphM.addEdge(4,2,1);
     graphM.addEdge(2,5,3);
     graphM.addEdge(5,4,1);
-    graphM.printAdjLists();
+    //graphM.printAdjLists();
 
     cout << "Dijkstra algorithm:" << endl;
-    graphM.dijkstra(0);
-*/
+    graphM.dijkstra(1);
+
     return 0;
 }

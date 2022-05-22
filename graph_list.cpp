@@ -58,7 +58,7 @@ int* node::getAdjVert(){
         i++;
         current = current->next;
     }while(current != NULL);
-    result[i+1] = END;
+    result[i] = END;
     return result;
 }
 
@@ -79,7 +79,7 @@ int* node::getAdjWeights(){
         i++;
         current = current->next;
     }while(current != NULL);
-    result[i+1] = END;
+    result[i] = END;
     return result;
 }
 
@@ -144,7 +144,7 @@ void printPath1(int parent[], int vert){
 void printSolution1(int distance[], int parent[], int vertNum, int source)
 {
     std::cout <<"Vertex \t Distance from Source \t Path" << std::endl;
-    for (int i = 1; i < vertNum; i++){
+    for (int i = 0; i < vertNum; i++){
         std::cout  << source << "->" << i << " \t\t"<< distance[i] << "\t\t" << source;
         printPath1(parent, i);
         std::cout << std::endl;
@@ -164,7 +164,7 @@ void graphL::dijkstra(int src){
         cost[i] = INF; // will be updated in while loop
         parent[i] = NO_PARENT; // at this moment no parent
     }
-    minHeap.print();
+    //minHeap.print();
     // set source distance as 0
     minHeap.changeDist(src, 0);
     // arrays for adjacent verticies and weights for every checked node
@@ -173,20 +173,27 @@ void graphL::dijkstra(int src){
     // queue is not empty. At each iteration we poll one node with min dist
     // and update dist of its adj vert
     while(!minHeap.isEmpty()){
-        cout << "----------" << endl;
-        minHeap.print();
+        //cout << "----------" << endl;
+        //minHeap.print();
         heapNode node = minHeap.poll();
         int currVert = node.vert;
         int minDist = node.distance;
-        std::cout << "Picked: " << currVert << std::endl;
+        //std::cout << "Picked: " << currVert << std::endl;
         cost[currVert] = minDist;
         adjVert = getAdjVert(currVert);
         adjCost = getAdjWeights(currVert);
+        //cout << "ADJACENT VERTICIES" << endl;
         int i = 0;
+        /*while(adjVert[i] != END){
+            cout << adjVert[i] << '\t' << adjCost[i] << endl;
+            i++;
+        }
+        i = 0;*/
         while(adjVert[i] != END){
             // check if new dist is lower than currently saved and if adj vert is still in queue
             if(cost[adjVert[i]] > adjCost[i] + cost[currVert] && minHeap.isInHeap(adjVert[i])){
                 minHeap.changeDist(adjVert[i], adjCost[i] + cost[currVert]);
+                cost[adjVert[i]] = adjCost[i] + cost[currVert];
                 parent[adjVert[i]] = currVert;
             }
             i++;

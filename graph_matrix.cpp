@@ -71,7 +71,7 @@ void printPath(int parent[], int vert){
 void printSolution(int distance[], int parent[], int vertNum, int source)
 {
     std::cout <<"Vertex \t Distance from Source \t Path" << std::endl;
-    for (int i = 1; i < vertNum; i++){
+    for (int i = 0; i < vertNum; i++){
         std::cout  << source << "->" << i << " \t\t"<< distance[i] << "\t\t" << source;
         printPath(parent, i);
         std::cout << std::endl;

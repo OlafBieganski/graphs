@@ -103,7 +103,7 @@ void priority_queue::changeDist(int vert,int newDist){
     array[node].distance = newDist;
     bubbleUp(node);
     bubbleDown(node);
-    print();
+    //print();
 }
 
 // check if vertex is in queue
@@ -124,11 +124,11 @@ heapNode priority_queue::removeNode(int idx){
     }
     swapNodes(idx, last_index);
     heapSize--;
-    print();
     result = array[last_index];
     position[array[last_index].vert] = NOT_INCLUDED;
     array[last_index] = heapNode();
     bubbleDown(0);
+    //print();
     return result;
 }
 
