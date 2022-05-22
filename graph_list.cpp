@@ -131,19 +131,26 @@ void graphL::getAdjWeights(int vert, int *result){
 }
 
 void graphL::dijkstra(int src){
-    // check if in scope
+    // check if src in scope
     if(src >= num_of_vertex) return;
+    // arrays for final dist and for path to every vert
     int cost[num_of_vertex], parent[num_of_vertex];
+    // create priority queue
     priority_queue minHeap(num_of_vertex);
+    // set all dist as INF
     for(int i = 0; i < num_of_vertex; i++){
         minHeap.add(i, INF);
+        cost[i] = INF;
     }
     // set source distance as 0
     minHeap.changeDist(src, 0);
+    // src has no parent vertex
     parent[src] = NO_PARENT;
-    int *adjVert, *adjCost, vert;
+    // arrays for adjacent verticies and weights for every checked node
+    int *adjVert, *adjCost;
     // upadate distances of adjacent verticies as long as
-    // queue is not empty
+    // queue is not empty. At each iteration we poll one node with min dist
+    // and update dist of its adj vert
     while(!minHeap.isEmpty()){
         heapNode node = minHeap.poll();
         int currVert = node.vert;
@@ -153,9 +160,12 @@ void graphL::dijkstra(int src){
         getAdjWeights(currVert, adjCost);
         int i = 0;
         while(adjVert[i] != END){
-            if(1){
-
+            // check if new dist is lower than currently saved and if adj vert is still in queue
+            if(cost[adjVert[i]] > adjCost[i] + cost[currVert] && minHeap.isInHeap(adjVert[i])){
+                minHeap.changeDist(adjVert[i], adjCost[i] + cost[currVert]);
+                parent[adjVert[i]] = currVert;
             }
+            i++;
         }
     }
 }
