@@ -41,54 +41,54 @@ void list::add(int vert, int cost){
     }
 }
 
-void node::getAdjVert(int *result){
+int* node::getAdjVert(){
     int i = 0;
     // count howy many adj verticies
     node* current = this;
     do{
         i++;
         current = current->next;
-    }while(current->next != NULL);
+    }while(current != NULL);
     // create array of sufficient size
-    int *arr = new int[i+1];
+    int* result = new int[i+1];
     i = 0;
     current = this;
     do{
-        arr[i] = current->vertex;
+        result[i] = current->vertex;
         i++;
         current = current->next;
-    }while(current->next != NULL);
-    arr[i+1] = END;
-    result = arr;
+    }while(current != NULL);
+    result[i+1] = END;
+    return result;
 }
 
-void node::getAdjWeights(int *result){
+int* node::getAdjWeights(){
     int i = 0;
     // count howy many adj verticies
     node* current = this;
     do{
         i++;
         current = current->next;
-    }while(current->next != NULL);
+    }while(current != NULL);
     // create array of sufficient size
-    int *arr = new int[i+1];
+    int* result = new int[i+1];
     i = 0;
     current = this;
     do{
-        arr[i] = current->weight;
+        result[i] = current->weight;
         i++;
         current = current->next;
-    }while(current->next != NULL);
-    arr[i+1] = END;
-    result = arr;
+    }while(current != NULL);
+    result[i+1] = END;
+    return result;
 }
 
-void list::getAdjVert(int result[]){
-    head->getAdjVert(result);
+int* list::getAdjVert(){
+    return head->getAdjVert();
 }
 
-void list::getAdjWeights(int result[]){
-    head->getAdjWeights(result);
+int* list::getAdjWeights(){
+    return head->getAdjWeights();
 }
 
 void list::printList(){
@@ -126,12 +126,12 @@ void graphL::printAdjLists(){
     }
 }
 
-void graphL::getAdjVert(int vert, int *result){
-    array[vert].getAdjVert(result);
+int* graphL::getAdjVert(int vert){
+    return array[vert].getAdjVert();
 }
 
-void graphL::getAdjWeights(int vert, int *result){
-    array[vert].getAdjWeights(result);
+int* graphL::getAdjWeights(int vert){
+    return array[vert].getAdjWeights();
 }
 
 void printPath1(int parent[], int vert){
@@ -164,20 +164,24 @@ void graphL::dijkstra(int src){
         cost[i] = INF; // will be updated in while loop
         parent[i] = NO_PARENT; // at this moment no parent
     }
+    minHeap.print();
     // set source distance as 0
     minHeap.changeDist(src, 0);
     // arrays for adjacent verticies and weights for every checked node
-    int *adjVert = nullptr, *adjCost = nullptr;
+    int *adjVert, *adjCost;
     // upadate distances of adjacent verticies as long as
     // queue is not empty. At each iteration we poll one node with min dist
     // and update dist of its adj vert
     while(!minHeap.isEmpty()){
+        cout << "----------" << endl;
+        minHeap.print();
         heapNode node = minHeap.poll();
         int currVert = node.vert;
         int minDist = node.distance;
+        std::cout << "Picked: " << currVert << std::endl;
         cost[currVert] = minDist;
-        getAdjVert(currVert, adjVert);
-        getAdjWeights(currVert, adjCost);
+        adjVert = getAdjVert(currVert);
+        adjCost = getAdjWeights(currVert);
         int i = 0;
         while(adjVert[i] != END){
             // check if new dist is lower than currently saved and if adj vert is still in queue

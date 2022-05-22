@@ -31,6 +31,7 @@ class priority_queue{
     bool isInHeap(int vert);
     void changeDist(int vert,int newDist);
     bool less(int a, int b);
+    void print();
 };
 
 #endif

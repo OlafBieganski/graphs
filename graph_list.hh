@@ -10,8 +10,8 @@ class node {
     void add(int vert, int cost);
     bool isNextNull(){return next == NULL;}
     void printList();
-    void getAdjVert(int *result);
-    void getAdjWeights(int *result);
+    int* getAdjVert();
+    int* getAdjWeights();
 };
 
 class list {
@@ -20,8 +20,8 @@ class list {
     list(){head = NULL;}
     void add(int vert, int cost);
     void printList();
-    void getAdjVert(int result[]);
-    void getAdjWeights(int result[]);
+    int* getAdjVert();
+    int* getAdjWeights();
 };
 
 class graphL {
@@ -35,8 +35,8 @@ class graphL {
     // dla testów
     void printAdjLists();
     void dijkstra(int src);
-    void getAdjVert(int vert, int *result);
-    void getAdjWeights(int vert, int *result);
+    int* getAdjVert(int vert);
+    int* getAdjWeights(int vert);
 };
 
 #endif

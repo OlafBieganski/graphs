@@ -4,6 +4,10 @@
 using namespace std;
 
 int main(){
+
+    
+
+    /*
     cout << "Graph implemented on adjacency list." << endl;
     graphL graph(7);
     graph.addEdge(0,1,1);
@@ -19,7 +23,7 @@ int main(){
     graph.addEdge(5,4,1);
     graph.printAdjLists();
     graph.dijkstra(1);
-/*
+
     cout << "Graph implemented on adjacency matrix." << endl;
     graphM graphM(7);
     graphM.addEdge(0,1,1);

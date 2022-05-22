@@ -29,9 +29,10 @@ bool priority_queue::isEmpty(){
 // swap two nodes in heap
 void  priority_queue::swapNodes(int a, int b){
     heapNode temp = array[a];
+    int posA = position[array[a].vert];
     position[array[a].vert] = position[array[b].vert];
     array[a] = array[b];
-    position[array[b].vert] = position[temp.vert];
+    position[array[b].vert] = posA;
     array[b] = temp;
 }
 
@@ -102,6 +103,7 @@ void priority_queue::changeDist(int vert,int newDist){
     array[node].distance = newDist;
     bubbleUp(node);
     bubbleDown(node);
+    print();
 }
 
 // check if vertex is in queue
@@ -122,8 +124,25 @@ heapNode priority_queue::removeNode(int idx){
     }
     swapNodes(idx, last_index);
     heapSize--;
+    print();
     result = array[last_index];
     array[last_index] = heapNode();
     bubbleDown(0);
     return result;
+}
+
+void priority_queue::print(){
+    cout << "PRIORITY QUEUE:" << endl << "Verticies: ";
+    for(int i = 0; i < heapSize; i++){
+        cout << array[i].vert << ' ';
+    }
+    cout << endl << "Weights: ";
+    for(int i = 0; i < heapSize; i++){
+        cout << array[i].distance << ' ';
+    }
+    cout << endl << "Positions: ";
+    for(int i = 0; i < heapCapacity; i++){
+        cout << position[i] << ' ';
+    }
+    cout << endl;
 }
