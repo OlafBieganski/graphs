@@ -1,11 +1,23 @@
 #include "graph_list.hh"
 #include "graph_matrix.hh"
+#include "priority_queue.hh"
 
 using namespace std;
 
 int main(){
 
-    
+    priority_queue minHeap(7);
+    for(int i = 0; i < 5; i++){
+        minHeap.add(i, 10);
+    }
+
+    minHeap.add(5, 1);
+    minHeap.add(6, 4);
+    minHeap.changeDist(4,0);
+    minHeap.changeDist(2,2);
+    minHeap.poll();
+    minHeap.poll();
+    minHeap.print();
 
     /*
     cout << "Graph implemented on adjacency list." << endl;

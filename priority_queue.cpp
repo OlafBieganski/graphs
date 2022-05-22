@@ -126,6 +126,7 @@ heapNode priority_queue::removeNode(int idx){
     heapSize--;
     print();
     result = array[last_index];
+    position[array[last_index].vert] = NOT_INCLUDED;
     array[last_index] = heapNode();
     bubbleDown(0);
     return result;
