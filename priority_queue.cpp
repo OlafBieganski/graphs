@@ -74,19 +74,20 @@ void priority_queue::add(int vert, int dist){
     // if empty
     if(this->isEmpty()){ 
         array[0] = heapNode(vert, dist);
-        position[vert] = 0;    
+        heapSize++;
+        position[vert] = 0;  
     }
     else{
         array[heapSize] = heapNode(vert, dist);
         position[vert] = heapSize;
-        bubbleUp(heapSize);
+        heapSize++;
+        bubbleUp(heapSize-1);
     }
-    heapSize++;
 }
 
 // returns true if node at idx 'a' is lesser than at 'b'
 bool priority_queue::less(int a, int b){
-    if(!(a < heapSize && b < heapSize)){
+    if(a >= heapSize || b >= heapSize){
         cout << "Error in bool priority_queue::less(int a, int b). Out of scope."
         << endl;
         exit(1);
@@ -98,7 +99,6 @@ bool priority_queue::less(int a, int b){
 void priority_queue::changeDist(int vert,int newDist){
     if(!isInHeap(vert)) return;
     int node = position[vert];
-    int parent = (node-1)/2;
     array[node].distance = newDist;
     bubbleUp(node);
     bubbleDown(node);

@@ -44,13 +44,15 @@ void list::add(int vert, int cost){
 void node::getAdjVert(int *result){
     int i = 0;
     // count howy many adj verticies
+    node* current = this;
     do{
         i++;
-    }while(next != NULL);
+        current = current->next;
+    }while(current->next != NULL);
     // create array of sufficient size
     int *arr = new int[i+1];
     i = 0;
-    node* current = this;
+    current = this;
     do{
         arr[i] = current->vertex;
         i++;
@@ -63,13 +65,15 @@ void node::getAdjVert(int *result){
 void node::getAdjWeights(int *result){
     int i = 0;
     // count howy many adj verticies
+    node* current = this;
     do{
         i++;
-    }while(next != NULL);
+        current = current->next;
+    }while(current->next != NULL);
     // create array of sufficient size
     int *arr = new int[i+1];
     i = 0;
-    node* current = this;
+    current = this;
     do{
         arr[i] = current->weight;
         i++;
@@ -130,6 +134,23 @@ void graphL::getAdjWeights(int vert, int *result){
     array[vert].getAdjWeights(result);
 }
 
+void printPath1(int parent[], int vert){
+    if(parent[vert] == NO_PARENT)
+        return;
+    printPath1(parent, parent[vert]);
+    std::cout << " " << vert;
+}
+
+void printSolution1(int distance[], int parent[], int vertNum, int source)
+{
+    std::cout <<"Vertex \t Distance from Source \t Path" << std::endl;
+    for (int i = 1; i < vertNum; i++){
+        std::cout  << source << "->" << i << " \t\t"<< distance[i] << "\t\t" << source;
+        printPath1(parent, i);
+        std::cout << std::endl;
+    }
+}
+
 void graphL::dijkstra(int src){
     // check if src in scope
     if(src >= num_of_vertex) return;
@@ -140,14 +161,13 @@ void graphL::dijkstra(int src){
     // set all dist as INF
     for(int i = 0; i < num_of_vertex; i++){
         minHeap.add(i, INF);
-        cost[i] = INF;
+        cost[i] = INF; // will be updated in while loop
+        parent[i] = NO_PARENT; // at this moment no parent
     }
     // set source distance as 0
     minHeap.changeDist(src, 0);
-    // src has no parent vertex
-    parent[src] = NO_PARENT;
     // arrays for adjacent verticies and weights for every checked node
-    int *adjVert, *adjCost;
+    int *adjVert = nullptr, *adjCost = nullptr;
     // upadate distances of adjacent verticies as long as
     // queue is not empty. At each iteration we poll one node with min dist
     // and update dist of its adj vert
@@ -168,4 +188,5 @@ void graphL::dijkstra(int src){
             i++;
         }
     }
+    printSolution1(cost, parent, num_of_vertex, src);
 }
