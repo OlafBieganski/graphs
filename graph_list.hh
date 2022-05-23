@@ -12,12 +12,14 @@ class node {
     void printList();
     int* getAdjVert();
     int* getAdjWeights();
+    ~node();
 };
 
 class list {
     node* head;
     public:
     list(){head = NULL;}
+    ~list();
     void add(int vert, int cost);
     void printList();
     int* getAdjVert();
@@ -33,6 +35,7 @@ class graphL {
     graphL(int vertNum);
     graphL(int vertNum, int density);
     graphL(): num_of_vertex(0), array(nullptr) {};
+    ~graphL();
     bool addEdge(int start, int end, int weight);
     // for tests
     void printAdjLists();

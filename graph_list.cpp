@@ -16,6 +16,11 @@ node::node(int vert, int cost){
     weight = cost;
 }
 
+node::~node(){
+    // probably not necessary to check for null
+    if(this->next != NULL) delete this->next;
+}
+
 void node::add(int vert, int cost){
     node* current = this;
     while(current->next != NULL){
@@ -31,6 +36,10 @@ void node::printList(){
         cout << current->vertex << '\t' << current->weight << endl;
         current = current->next;
     }while(current != NULL);
+}
+
+list::~list(){
+    delete head;
 }
 
 void list::add(int vert, int cost){
@@ -107,6 +116,10 @@ int* list::getAdjWeights(){
 void list::printList(){
     if(head != NULL)
         head->printList();
+}
+
+graphL::~graphL(){
+    delete[] array;
 }
 
 graphL::graphL(int vertNum){
@@ -267,6 +280,9 @@ void graphL::dijkstra(int src, bool print){
             }
             i++;
         }
+        // free memory allocated inside getAdjVert(), getAdjWeights()
+        delete[] adjCost;
+        delete[] adjVert;
     }
     if(print == true)
         printSolution1(cost, parent, num_of_vertex, src);

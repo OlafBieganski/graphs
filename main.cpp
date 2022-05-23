@@ -7,9 +7,43 @@
 
 using namespace std;
 
-int main(){
+void genereteTimeFile();
+void readGraph();
+void writeGraph();
 
-    int vertNumbers[5] = {10, 50, 100, 500, 1000};
+int main(){
+    while(true){
+        LOG("MENU:");
+        LOG("1. Generate file with algorithm runtime.");
+        LOG("2. Read graph from file.");
+        LOG("3. Save dijkstra algorith output to file.");
+        LOG("4. Terminate program.");
+        LOG("Input number from 1 to 4:");
+        int userInput = 0;
+        cin >> userInput;
+        switch(userInput){
+            case 1:
+                genereteTimeFile();
+                return 0;
+            case 2:
+                readGraph();
+                break;
+            case 3:
+                writeGraph();
+                break;
+            case 4:
+                return 0;
+            default:
+                LOG("Invalid option.");
+                break;
+        }
+    }
+    return 0;
+}
+
+
+void genereteTimeFile(){
+    int vertNumbers[5] = {10, 25, 70, 100, 200};
     int density[4] = {25, 50, 75, 100};
     string names[4] = {"25%", "50%", "75%", "100%"};
     graphL graphList[4][5][100];
@@ -39,7 +73,7 @@ int main(){
     File.open(filename, ios::app);
     if(!File.is_open()){
         LOG("File opening error.");
-        return 1;
+        exit(1);
     }
 
     // do dijkstra for list and save time for each case
@@ -77,6 +111,12 @@ int main(){
     }
 
     File.close();
+}
 
-    return 0;
+void readGraph(){
+
+}
+
+void writeGraph(){
+
 }
