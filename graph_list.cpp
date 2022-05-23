@@ -1,6 +1,8 @@
 #include "graph_list.hh"
 #include "priority_queue.hh"
 #include <limits.h>
+#include <time.h>
+#include<sys/time.h>
 
 #define INF INT_MAX
 #define NO_PARENT -1
@@ -83,11 +85,22 @@ int* node::getAdjWeights(){
     return result;
 }
 
+// returns ptr to arr of adjacent verticies. Last elem in returned arr is taged as const 'END' 
 int* list::getAdjVert(){
+    if(head == NULL){
+        int *result = new int[1];
+        result[0] = END;
+        return result;
+    }
     return head->getAdjVert();
 }
 
 int* list::getAdjWeights(){
+    if(head == NULL){
+        int *result = new int[1];
+        result[0] = END;
+        return result;
+    }
     return head->getAdjWeights();
 }
 
@@ -98,8 +111,64 @@ void list::printList(){
 
 graphL::graphL(int vertNum){
     num_of_vertex = vertNum;
-    // tyle list ile wierzchołkow
+    // as many lists as the num of verticies
     array = new list[vertNum];
+}
+
+// creates a graph of given verticies number and density
+// density ranges between 0-100 (%)
+graphL::graphL(int vertNum, int density){
+    num_of_vertex = vertNum;
+    // as many lists as the num of verticies
+    array = new list[vertNum];
+    //----part for edges creation----
+    // evaluate edges
+    int edges = 0.5*density/100*num_of_vertex*(num_of_vertex-1);
+    // initial values for connections
+    int weight = 0, conNum = num_of_vertex -1, conNum2 = 0;
+    // for rand()
+    struct timeval t1;
+    gettimeofday(&t1, NULL);
+    srand(t1.tv_usec * t1.tv_sec);
+    // calculate how many initial concetions and random
+    if(edges - (num_of_vertex-1) <= 0){
+        conNum = edges;
+    } else if(edges - (num_of_vertex-1) > 0){
+        conNum2 = edges - (num_of_vertex-1);
+    }
+    // first we connect all verticies
+    for(int i = 0; i < conNum; i++){
+        weight = (rand() % 100) + 1;
+        addEdge(i, i+1, weight);
+    }
+    // then we make random connections between verts not connected
+    int x, y;
+    for(int i = 0; i < conNum2; i++){
+        x = rand() % vertNum;
+        y = rand() % vertNum;
+        weight = (rand() % 100) + 1;
+        // check if not connected and not connecting with itself
+        if(!isEdge(x,y) && x != y){
+            addEdge(x, y, weight);
+        }
+        else i--;
+    }
+}
+
+// returns true if two verts of given idx connected
+bool graphL::isEdge(int start, int end){
+    if(start < 0 || end < 0 || start >= num_of_vertex || end >= num_of_vertex){
+        cerr << "Error in isEgde()." << endl;
+        exit(1);
+    }
+    int *adjVerts = getAdjVert(start);
+    // iterate through adj verts and check if end is one of them
+    int i = 0;
+    while(adjVerts[i] != END){
+        if(adjVerts[i] == end) return true;
+        i++;
+    }
+    return false;
 }
 
 // adds an egde between two nodes
@@ -151,7 +220,7 @@ void printSolution1(int distance[], int parent[], int vertNum, int source)
     }
 }
 
-void graphL::dijkstra(int src){
+void graphL::dijkstra(int src, bool print){
     // check if src in scope
     if(src >= num_of_vertex) return;
     // arrays for final dist and for path to every vert
@@ -199,5 +268,23 @@ void graphL::dijkstra(int src){
             i++;
         }
     }
-    printSolution1(cost, parent, num_of_vertex, src);
+    if(print == true)
+        printSolution1(cost, parent, num_of_vertex, src);
+}
+
+// performs dijkstra for given src and returns its run-time 
+double graphL::dijkstraTime(int src){
+    // Start measuring time
+    struct timespec begin, end; 
+    clock_gettime(CLOCK_PROCESS_CPUTIME_ID, &begin);
+
+    // perform dijkstra algorithm
+    dijkstra(src, false);
+
+    // Stop measuring time and calculate the elapsed time
+    clock_gettime(CLOCK_PROCESS_CPUTIME_ID, &end);
+    long seconds = end.tv_sec - begin.tv_sec;
+    long nanoseconds = end.tv_nsec - begin.tv_nsec;
+    double elapsed = seconds + nanoseconds*1e-9;
+    return elapsed;
 }

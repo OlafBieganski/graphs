@@ -1,6 +1,10 @@
 #include "graph_matrix.hh"
 #include <iostream>
 #include <limits.h>
+#include <time.h>
+#include<sys/time.h>
+
+using namespace std;
 
 #define INFINITY INT_MAX
 #define NO_PARENT -1
@@ -22,6 +26,70 @@ graphM::graphM(int vertNum){
             }
         }
     }
+}
+// creates graph with given density. Connections are random.
+// density between 0-100 (%)
+graphM::graphM(int vertNum, int density){
+    if(density < 0 || density > 100){
+        cerr << "Error in graphM(density)." << endl;
+        exit(1);
+    }
+    if(vertNum > 0){
+        numVert = vertNum;
+        // allocating rows
+        adj_matrix = new int*[vertNum];
+        // allocating colums
+        for(int i = 0; i < vertNum; i++)
+            adj_matrix[i] = new int[vertNum];
+        // filling matrix with 0s (we have no edges yet)
+        for(int i = 0; i < vertNum; i++){
+            for(int j = 0; j < vertNum; j++){
+                adj_matrix[i][j] = 0;
+            }
+        }
+    }
+
+    // evaluate edges
+    int edges = 0.5*density/100*numVert*(numVert-1);
+    // initial values for connections
+    int weight = 0, conNum = numVert -1, conNum2 = 0;
+    // for rand()
+    struct timeval t1;
+    gettimeofday(&t1, NULL);
+    srand(t1.tv_usec * t1.tv_sec);
+    // calculate how many initial concetions and random
+    if(edges - (numVert-1) <= 0){
+        conNum = edges;
+    } else if(edges - (numVert-1) > 0){
+        conNum2 = edges - (numVert-1);
+    }
+    // first we connect all verticies
+    for(int i = 0; i < conNum; i++){
+        weight = (rand() % 100) + 1;
+        addEdge(i, i+1, weight);
+    }
+    // then we make random connections between verts not connected
+    int x, y;
+    for(int i = 0; i < conNum2; i++){
+        x = rand() % vertNum;
+        y = rand() % vertNum;
+        weight = (rand() % 100) + 1;
+        // check if not connected and not connecting with itself
+        if(!isEdge(x,y) && x != y){
+            addEdge(x, y, weight);
+        }
+        else i--;
+    }
+}
+
+// check if connections between two given idx exists
+bool graphM::isEdge(int start, int end){
+    if(start < 0 || end < 0 || start >= numVert || end >= numVert){
+        cerr << "Error in isEgde()." << endl;
+        exit(1);
+    }
+    // second check redundant
+    return (adj_matrix[start][end] || adj_matrix[end][start]);
 }
 
 // adds an egde beetwen two verticies with given weight
@@ -78,15 +146,15 @@ void printSolution(int distance[], int parent[], int vertNum, int source)
     }
 }
 
-void graphM::dijkstra(int source){
+void graphM::dijkstra(int source, bool print){
 
     int distance[numVert]; // it will hold the sum of distances (shortest possible)
     bool includedSPT[numVert]; // true for the vertex that has already been included to spt
     int parent[numVert]; // index is a vertex and value assigned is parent vertex
-    parent[source] = NO_PARENT; // source has no parent
     
     for(int i = 0; i < numVert; i++){
         distance[i] = INFINITY, includedSPT[i] = false;
+        parent[i] = NO_PARENT; // at first no parents
     }
     distance[source] = 0; // initial vertex marked as included to spt
 
@@ -102,5 +170,23 @@ void graphM::dijkstra(int source){
             }
         }
     }
-    printSolution(distance, parent, numVert, source);
+    if(print == true)
+        printSolution(distance, parent, numVert, source);
+}
+
+// performs dijkstra for given src and returns its run-time 
+double graphM::dijkstraTime(int src){
+    // Start measuring time
+    struct timespec begin, end; 
+    clock_gettime(CLOCK_PROCESS_CPUTIME_ID, &begin);
+
+    // perform dijkstra algorithm
+    dijkstra(src, false);
+
+    // Stop measuring time and calculate the elapsed time
+    clock_gettime(CLOCK_PROCESS_CPUTIME_ID, &end);
+    long seconds = end.tv_sec - begin.tv_sec;
+    long nanoseconds = end.tv_nsec - begin.tv_nsec;
+    double elapsed = seconds + nanoseconds*1e-9;
+    return elapsed;
 }

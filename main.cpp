@@ -1,59 +1,82 @@
 #include "graph_list.hh"
 #include "graph_matrix.hh"
 #include "priority_queue.hh"
+#include <fstream>
+
+#define LOG(x) std::cout << x << std::endl
 
 using namespace std;
 
 int main(){
 
-    /*priority_queue minHeap(7);
-    for(int i = 0; i < 5; i++){
-        minHeap.add(i, 10);
+    int vertNumbers[5] = {10, 50, 100, 500, 1000};
+    int density[4] = {25, 50, 75, 100};
+    string names[4] = {"25%", "50%", "75%", "100%"};
+    graphL graphList[4][5][100];
+    graphM graphMatrix[4][5][100];
+    string filename;
+
+    // type name of file
+    LOG("Type output file name:");
+    cin >> filename;
+    cout << "Are sure sure you want to write to file " << filename << " ?" << endl;
+    cin.get();
+
+    // fill array with proper graphs
+    for(int i = 0; i < 4; i++){
+        for(int j = 0; j < 5; j++){
+            LOG("Work in progress:");
+            LOG(j);
+            for(int k = 0; k < 100; k++){
+                graphList[i][j][k] = graphL(vertNumbers[j], density[i]);
+                graphMatrix[i][j][k] = graphM(vertNumbers[j], density[i]);
+            }
+        }
     }
 
-    minHeap.add(5, 1);
-    minHeap.add(6, 4);
-    minHeap.changeDist(4,0);
-    minHeap.changeDist(2,2);
-    minHeap.poll();
-    minHeap.poll();
-    minHeap.print();*/
+    // open file
+    fstream File;
+    File.open(filename, ios::app);
+    if(!File.is_open()){
+        LOG("File opening error.");
+        return 1;
+    }
 
-   
-    cout << "Graph implemented on adjacency list." << endl;
-    graphL graph(7);
-    graph.addEdge(0,1,1);
-    graph.addEdge(1,2,2);
-    graph.addEdge(2,3,3);
-    graph.addEdge(1,3,1);
-    graph.addEdge(0,3,3);
-    graph.addEdge(3,6,1);
-    graph.addEdge(6,2,4);
-    graph.addEdge(1,4,5);
-    graph.addEdge(4,2,1);
-    graph.addEdge(2,5,3);
-    graph.addEdge(5,4,1);
-    //graph.printAdjLists();
-    graph.dijkstra(1);
+    // do dijkstra for list and save time for each case
+    double elapsedTime = 0;
 
-    cout << "Graph implemented on adjacency matrix." << endl;
-    graphM graphM(7);
-    graphM.addEdge(0,1,1);
-    graphM.addEdge(1,2,2);
-    graphM.addEdge(2,3,3);
-    graphM.addEdge(1,3,1);
-    graphM.addEdge(1,4,1);
-    graphM.addEdge(0,3,3);
-    graphM.addEdge(3,6,1);
-    graphM.addEdge(6,2,4);
-    graphM.addEdge(1,4,5);
-    graphM.addEdge(4,2,1);
-    graphM.addEdge(2,5,3);
-    graphM.addEdge(5,4,1);
-    //graphM.printAdjLists();
+    File << "Adjacency List" << '\n';
+    File << "\t10" << "\t20"<< "\t50"<< "\t75"<< "\t100" << '\n';
+    for(int i = 0; i < 4; i++){
+        File << names[i] << '\t';
+        for(int j = 0; j < 5; j++){
+            for(int k = 0; k < 100; k++){
+                elapsedTime += graphList[i][j][k].dijkstraTime(0);
+            }
+            File << fixed << elapsedTime << '\t';
+        }
+        File << '\n';
+        elapsedTime = 0;
+    }
 
-    cout << "Dijkstra algorithm:" << endl;
-    graphM.dijkstra(1);
+    File << '\n';
+    elapsedTime = 0;
+
+    File << "Adjacency Matrix" << '\n';
+    File << "\t10" << "\t20"<< "\t50"<< "\t75"<< "\t100" << '\n';
+    for(int i = 0; i < 4; i++){
+        File << names[i] << '\t';
+        for(int j = 0; j < 5; j++){
+            for(int k = 0; k < 100; k++){
+                elapsedTime += graphMatrix[i][j][k].dijkstraTime(0);
+            }
+            File << fixed << elapsedTime << '\t';
+        }
+        File << '\n';
+        elapsedTime = 0;
+    }
+
+    File.close();
 
     return 0;
 }
