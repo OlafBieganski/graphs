@@ -7,19 +7,22 @@ class node {
     node* next;
     public:
     node(int vert, int cost);
+    node(): next(NULL) {}
     void add(int vert, int cost);
     bool isNextNull(){return next == NULL;}
     void printList();
     int* getAdjVert();
     int* getAdjWeights();
-    ~node();
+    //~node();
+    /*node(const node &another);
+    void operator = (const node& another);*/
 };
 
 class list {
     node* head;
     public:
     list(){head = NULL;}
-    ~list();
+    //~list();
     void add(int vert, int cost);
     void printList();
     int* getAdjVert();
@@ -35,7 +38,7 @@ class graphL {
     graphL(int vertNum);
     graphL(int vertNum, int density);
     graphL(): num_of_vertex(0), array(nullptr) {};
-    ~graphL();
+    //~graphL();
     bool addEdge(int start, int end, int weight);
     // for tests
     void printAdjLists();

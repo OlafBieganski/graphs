@@ -43,7 +43,7 @@ int main(){
 
 
 void genereteTimeFile(){
-    int vertNumbers[5] = {10, 25, 70, 100, 200};
+    int vertNumbers[5] = {10, 20, 50, 75, 100};
     int density[4] = {25, 50, 75, 100};
     string names[4] = {"25%", "50%", "75%", "100%"};
     graphL graphList[4][5][100];
@@ -54,6 +54,7 @@ void genereteTimeFile(){
     LOG("Type output file name:");
     cin >> filename;
     cout << "Are sure sure you want to write to file " << filename << " ?" << endl;
+    cin.get();
     cin.get();
 
     // fill array with proper graphs
@@ -87,7 +88,7 @@ void genereteTimeFile(){
             for(int k = 0; k < 100; k++){
                 elapsedTime += graphList[i][j][k].dijkstraTime(0);
             }
-            File << fixed << elapsedTime << '\t';
+            File << fixed << elapsedTime/100 << '\t';
         }
         File << '\n';
         elapsedTime = 0;
@@ -104,7 +105,7 @@ void genereteTimeFile(){
             for(int k = 0; k < 100; k++){
                 elapsedTime += graphMatrix[i][j][k].dijkstraTime(0);
             }
-            File << fixed << elapsedTime << '\t';
+            File << fixed << elapsedTime/100 << '\t';
         }
         File << '\n';
         elapsedTime = 0;
@@ -114,7 +115,19 @@ void genereteTimeFile(){
 }
 
 void readGraph(){
+    // type name of input file
+    string filename;
+    LOG("Type graph data file name:");
+    cin >> filename;
 
+    ifstream File;
+    File.open(filename, ios::in);
+    if(!File.is_open()){
+        LOG("File opening error.");
+        exit(1);
+    }
+
+    
 }
 
 void writeGraph(){

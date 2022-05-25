@@ -16,10 +16,18 @@ node::node(int vert, int cost){
     weight = cost;
 }
 
-node::~node(){
+//node::node(const node &another){}
+
+/*void node::operator = (const node& another){
+    this->vertex = another.vertex;
+    this->weight = another.weight;
+    next = new node(another.next->vertex, another.next->weight);
+}*/
+
+/*node::~node(){
     // probably not necessary to check for null
     if(this->next != NULL) delete this->next;
-}
+}*/
 
 void node::add(int vert, int cost){
     node* current = this;
@@ -38,9 +46,9 @@ void node::printList(){
     }while(current != NULL);
 }
 
-list::~list(){
+/*list::~list(){
     delete head;
-}
+}*/
 
 void list::add(int vert, int cost){
     if(head == NULL){
@@ -118,9 +126,9 @@ void list::printList(){
         head->printList();
 }
 
-graphL::~graphL(){
+/*graphL::~graphL(){
     delete[] array;
-}
+}*/
 
 graphL::graphL(int vertNum){
     num_of_vertex = vertNum;
@@ -144,7 +152,7 @@ graphL::graphL(int vertNum, int density){
     gettimeofday(&t1, NULL);
     srand(t1.tv_usec * t1.tv_sec);
     // calculate how many initial concetions and random
-    if(edges - (num_of_vertex-1) <= 0){
+    if(edges - conNum < 0){
         conNum = edges;
     } else if(edges - (num_of_vertex-1) > 0){
         conNum2 = edges - (num_of_vertex-1);
