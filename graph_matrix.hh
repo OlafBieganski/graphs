@@ -1,5 +1,6 @@
 #ifndef GRAPH_M
 #define GRAPH_M
+#include <fstream>
 
 class graphM {
     int numVert;
@@ -13,6 +14,7 @@ class graphM {
     void dijkstra(int source, bool print = true);
     bool isEdge(int start, int end);
     double dijkstraTime(int src);
+    void dijkstraToFile(int source, std::fstream & file);
 };
 
 #endif

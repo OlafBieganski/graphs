@@ -127,9 +127,36 @@ void readGraph(){
         exit(1);
     }
 
-    
+    int E, V, src, start, end, cost;
+    File >> E >> V >> src;
+    graphL graph(V);
+    for(int i = 0; i < E; i++){
+        File >> start >> end >> cost;
+        graph.addEdge(start, end, cost);
+    }
+    graph.printAdjLists();
+    graph.dijkstra(src);
+    File.close();
 }
 
 void writeGraph(){
+    string filename;
+    LOG("Type dijkstra output data file name:");
+    cin >> filename;
 
+    fstream File;
+    File.open(filename, ios::out);
+    if(!File.is_open()){
+        LOG("File opening error.");
+        exit(1);
+    }
+
+    int vertNum, density;
+    LOG("Type number of verticies:");
+    cin >> vertNum;
+    LOG("Type density value:");
+    cin >> density;
+    graphM graph(vertNum, density);
+    graph.dijkstraToFile(0, File);
+    File.close();
 }

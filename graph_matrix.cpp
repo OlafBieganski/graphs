@@ -190,3 +190,47 @@ double graphM::dijkstraTime(int src){
     double elapsed = seconds + nanoseconds*1e-9;
     return elapsed;
 }
+
+void printPathTF(int parent[], int vert, std::fstream & file){
+    if(parent[vert] == NO_PARENT)
+        return;
+    printPathTF(parent, parent[vert], file);
+    file << " " << vert;
+}
+
+void printToFile(int distance[], int parent[], int vertNum, int source, std::fstream & file)
+{
+    file <<"Vertex \t Distance from Source \t Path" << std::endl;
+    for (int i = 0; i < vertNum; i++){
+        file  << source << "->" << i << " \t\t"<< distance[i] << "\t\t" << source;
+        printPathTF(parent, i, file);
+        file << std::endl;
+    }
+}
+
+void graphM::dijkstraToFile(int source, std::fstream & file){
+
+    int distance[numVert]; // it will hold the sum of distances (shortest possible)
+    bool includedSPT[numVert]; // true for the vertex that has already been included to spt
+    int parent[numVert]; // index is a vertex and value assigned is parent vertex
+    
+    for(int i = 0; i < numVert; i++){
+        distance[i] = INFINITY, includedSPT[i] = false;
+        parent[i] = NO_PARENT; // at first no parents
+    }
+    distance[source] = 0; // initial vertex marked as included to spt
+
+    for(int i = 0; i < numVert-1; i++){
+        int picked = minDistance(distance, includedSPT, numVert);
+        includedSPT[picked] = true;
+
+        for(int j = 0; j < numVert; j++){
+            if(!includedSPT[j] && adj_matrix[picked][j] && distance[picked] != INFINITY
+            && distance[picked] + adj_matrix[picked][j] < distance[j]){
+                parent[j] = picked; // the last update will be parent
+                distance[j] = distance[picked] + adj_matrix[picked][j]; // upadating distance for adjacent verticies
+            }
+        }
+    }
+    printToFile(distance, parent, numVert, source, file);
+}
