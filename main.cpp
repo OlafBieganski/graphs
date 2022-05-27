@@ -38,12 +38,11 @@ int main(){
                 break;
         }
     }
-    return 0;
 }
 
 
 void genereteTimeFile(){
-    int vertNumbers[5] = {10, 20, 50, 75, 100};
+    int vertNumbers[5] = {10, 20, 50, 100, 150};
     int density[4] = {25, 50, 75, 100};
     string names[4] = {"25%", "50%", "75%", "100%"};
     graphL graphList[4][5][100];
@@ -88,7 +87,7 @@ void genereteTimeFile(){
             for(int k = 0; k < 100; k++){
                 elapsedTime += graphList[i][j][k].dijkstraTime(0);
             }
-            File << fixed << elapsedTime/100 << '\t';
+            File << fixed << elapsedTime*10 << '\t';
         }
         File << '\n';
         elapsedTime = 0;
@@ -105,7 +104,7 @@ void genereteTimeFile(){
             for(int k = 0; k < 100; k++){
                 elapsedTime += graphMatrix[i][j][k].dijkstraTime(0);
             }
-            File << fixed << elapsedTime/100 << '\t';
+            File << fixed << elapsedTime*10 << '\t';
         }
         File << '\n';
         elapsedTime = 0;
